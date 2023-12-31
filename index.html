@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 20px;
+            overflow: hidden;
+        }
+
+        img {
+            width: 15%;
+            height: auto;
+            position: fixed;
+            bottom: 20px;
+            outline: none;
+        }
+
+        #myBtn {
+            position: fixed;
+            bottom: 0px;
+            right: 100px;
+            padding: 15px;
+            border: none;
+            transition: right 0.5s ease-out, bottom 0.5s ease-out;
+        }
+
+        #bars {
+            right: 30px;
+            border: solid black;
+        }
+
+        #portal {
+            left: 30px;
+        }
+
+        #myBtn:hover {
+            right: calc(100vw - 100px);
+            bottom: calc(100vh - 100px);
+        }
+    </style>
+</head>
+
+<body>
+    <img id="myBtn" title="Please nooooo!" src="./Assets/escapee.png" />
+
+    <div style="background-color:black;color:white;padding:30px">Catch De Escapee</div>
+    <div style="background-color:lightgrey;padding:30px 30px 2500px">This page demonstrates how to create
+        a untouchable button
+        Anyway the escapee runs away when the user tries to Catch it.
+        <br>
+        Try hitting it maybe it works.
+        <strong>Catch it before it escapes from the portal</strong>.
+        <br>
+    </div>
+    <img id="bars" src="./Assets/bars.png" />
+    <img id="portal" src="./Assets/portal.png" />
+
+    <script>
+        let myImage = document.getElementById("myBtn");
+        let maxX, maxY;
+
+        function getRandomPosition() {
+            let buttonWidth = myImage.offsetWidth;
+            let buttonHeight = myImage.offsetHeight;
+            maxX = window.innerWidth - buttonWidth;
+            maxY = window.innerHeight - buttonHeight;
+
+            let randomX = Math.floor(Math.random() * maxX);
+            let randomY = Math.floor(Math.random() * maxY);
+
+            myImage.style.right = randomX + "px";
+            myImage.style.bottom = randomY + "px";
+        }
+
+        function checkOverlap() {
+            let myButton = document.getElementById("myBtn");
+            let portal = document.getElementById("portal");
+
+            let myButtonRect = myButton.getBoundingClientRect();
+            let portalRect = portal.getBoundingClientRect();
+
+            if (
+                myButtonRect.left < portalRect.right &&
+                myButtonRect.right > portalRect.left &&
+                myButtonRect.top < portalRect.bottom &&
+                myButtonRect.bottom > portalRect.top
+            ) {
+                myButton.style.display = "none";
+                clearInterval(interval);
+                setTimeout(function () {
+                    alert("Ohhh no, he ran away! Try again");
+                    window.location.reload();
+                }, 1000);
+            } else {
+                myButton.style.display = "block";
+            }
+        }
+
+        myImage.addEventListener("mouseover", getRandomPosition);
+        setInterval(getRandomPosition, 1500);
+        myImage.addEventListener("click", function () {
+            alert("Congratulations! You caught the escapee!");
+        });
+
+        let interval = setInterval(checkOverlap, 100);
+
+    </script>
+
+</body>
+
+</html>
